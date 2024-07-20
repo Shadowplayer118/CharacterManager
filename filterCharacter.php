@@ -1,0 +1,30 @@
+<?php
+include 'connection.php';
+
+$name = isset($_POST['name']) ? $_POST['name'] : '';
+
+// Use prepared statements to avoid SQL injection risks
+$stmt = $conn->prepare("SELECT * FROM characters WHERE name LIKE ?");
+$searchTerm = "%$name%";
+$stmt->bind_param("s", $searchTerm);
+
+// Execute the statement
+$stmt->execute();
+
+// Get the result
+$result = $stmt->get_result();
+$characters = [];
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $characters[] = $row;
+    }
+}
+
+// Close the statement and connection
+$stmt->close();
+$conn->close();
+
+// Return the result as a JSON response
+echo json_encode($characters);
+?>

@@ -1,36 +1,11 @@
 $(document).ready(function(){
     loadTable();
+ 
+
 });
 
-$('#addCharacterForm').submit(function(event){
-    event.preventDefault();
 
-    var formData = $(this).serialize();
-
-    $.ajax({
-        url: 'addCharacters.php',
-        method: 'POST',
-        data: formData,
-        dataType: 'json',
-        success: function(response){
-            console.log('Character added successfully: ', response);
-
-            // Close the modal after successful form submission
-            $('#modal').hide();
-
-            // Reload the table to show the new character
-            loadTable();
-            window.location.reload();
-
-
-        },
-        error: function(jqXHR, textStatus, errorThrown){
-            console.error('Error adding characters: ', textStatus, errorThrown );
-            alert('Failed to add character, please try again.');
-           
-        }
-    });
-});
+//load table
 function loadTable(){
     $.ajax({
         url: 'getCharacters.php',
@@ -56,11 +31,20 @@ function loadTable(){
     });
 }
 
+
+
 // Open modal
 document.getElementById('openModalBtn').onclick = function(){
     var modal = document.getElementById('modal');
     modal.style.display = 'block';
 }
+
+document.getElementById('refresh').onclick = function(){
+
+ window.location.reload();
+}
+
+
 
 // Close modal
 document.getElementsByClassName('close')[0].onclick = function(){
@@ -68,6 +52,8 @@ document.getElementsByClassName('close')[0].onclick = function(){
     modal.style.display = 'none';
 }
 
+
+//refresh page
 window.onclick = function(event){
     var modal = document.getElementById('modal');
     if (event.target == modal) {
@@ -76,8 +62,43 @@ window.onclick = function(event){
 }
 
 
+//Add Character
+$('#addCharacterForm').submit(function(event){
+    event.preventDefault();
 
+    var formData = $(this).serialize();
+
+    $.ajax({
+        url: 'addCharacters.php',
+        method: 'POST',
+        data: formData,
+        dataType: 'json',
+        success: function(response){
+            console.log('Character added successfully: ', response);
+
+            // Close the modal after successful form submission
+            $('#modal').hide();
+
+            // Reload the table to show the new character
+            loadTable();
+            window.location.reload();
+
+
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            console.error('Error adding characters: ', textStatus, errorThrown );
+            alert('Failed to add character, please try again.');  
+        }
+    });
+});
+
+
+//delete character
 $('#character-table').on('click','.delete-btn',function(){
+
+    if (!confirm('Are you sure you want to delete this character?')){
+        return;
+    }
 
     var row = $(this).closest('tr');
     var id = row.find('.id').text();
@@ -101,11 +122,15 @@ $('#character-table').on('click','.delete-btn',function(){
     })
 })
 
+
+//close edit
+
 $('#close-edit').click(function() {
     $('#edit-modal').hide();
 });
 
 
+//fetch edit
 $(document).on('click', '.edit-btn', function() {
     var row = $(this).closest('tr');
     var id = row.find('.id').text();
@@ -127,6 +152,8 @@ $(document).on('click', '.edit-btn', function() {
     });
 });
 
+
+//edit function
 $('#edit-form').submit(function(e) {
     e.preventDefault();
 
@@ -158,83 +185,50 @@ $('#edit-form').submit(function(e) {
 });
 
 
+//Filter Function
+$("#filtername").on('input', function() {
+    var nameInput = $(this).val().trim(); // Get the trimmed input value
 
+    // Console logs for debugging
+    console.log("Name input:", nameInput);
 
-// Handle edit form submission
-// $('#edit-form').submit(function(e) {
-//     e.preventDefault();
-//     $.ajax({
-//         url: 'editCharacter.php',
-//         type: 'POST',
-//         data: $(this).serialize(),
-//         success: function(response) {
-//             alert('Character updated successfully!');
-//             $('#edit-modal').hide();
-//             location.reload();
-//             loadTable();
-//         },
-//         error: function() {
-//             alert('Error updating character.');
-//         }
-//     });
-// });
+    // If nameInput is empty, reload the page
+    if (nameInput === "") {
+        console.log("Table empty, reloading page");
+        window.location.reload(); // Reload the page if nameInput is empty
+        return;
+    }
 
+    // Perform AJAX request with the filter data
+    $.ajax({
+        url: 'filterCharacter.php',
+        method: 'POST',
+        data: { name: nameInput }, // Send data as key-value pairs
+        dataType: 'json',
+        success: function(data) {
 
-
-
-
-
-
-// $('#character-table').on('click','.edit-btn',function(){
-//     var row = $(this).closest('tr');
-//     var id = row.data('id');
-
-//     $.ajax({
-//         url:'fetchCharacter.php',
-//         method:'GET',
-//         data:{id:id},
-//         dataType: 'json',
-//         success: function(data){
-//             $('#id').val(data.id);
-//             $('#name').val(data.name);
-//             $('#title').val(data.title);
-//             $('#alignment').val(data.alignment);
-
-//             $('#edit-modal').css('display','block');
-//         },
-
-//         error: function(jqXHR,textStatus,errorThrown){
-//             console.error('Error fetching character:',textStatus, errorThrown);
-//             alert('Failed to fetch character data. Please try again.')
-//         }
+            var tableBody = $('#character-table tbody');
+            var actions =$('.actions');
+            tableBody.empty();
+            if (Array.isArray(data)) {
+                $.each(data, function(index, row) {
+                    // Create a new row for each item
+                    var newRow = $('<tr></tr>');
+                    newRow.append('<td>' + row.id + '</td>');
+                    newRow.append('<td>' + row.name + '</td>');
+                    newRow.append('<td>' + row.title + '</td>');
+                    newRow.append('<td>' + row.alignment + '</td>');
+                    newRow.append('<td><button class="delete-btn" data-id="' + row.id + '">Delete</button><button class="edit-btn" data-id="' + row.id + '">Edit</button></td>');
+                    tableBody.append(newRow);
+                });
+            } else {
+                console.error('Unexpected data format:', data);
+            }
+        },
         
-//     });
-// });
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error loading data: ' + textStatus, errorThrown);
+        }
+    });
+});
 
-// $('#close-edit').click(function(){
-//     $('edit-modal').css('display','none');
-// });
-
-
-// $('#edit-form').submit(function(event){
-//     event.preventDefault();
-
-//     var formData = $(this).serialize();
-
-//     $.ajax({
-//         url:'editCharacter.php',
-//         method: 'POST',
-//         data: formData,
-//         dataType: 'json',
-//         success: function(){
-//             console.log('Character updated successfully', response);
-//             $('edit-modal').css('display','none');
-
-//         },
-
-//         error: function(jqXHR,textStatus,errorThrown){
-//             console.error('Error updating character:', textStatus, errorThrown);
-//             alert('Failed to update character. Please try again.');
-//         }
-//     });
-// });
