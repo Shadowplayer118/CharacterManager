@@ -1,69 +1,53 @@
-$(document).ready(function(){
+$(document).ready(function() {
     loadTable();
- 
-
 });
 
-
-//load table
-function loadTable(){
+// Load table with data from the server
+function loadTable() {
     $.ajax({
         url: 'getCharacters.php',
         method: 'GET',
         dataType: 'json',
-        success: function(data){
+        success: function(data) {
             var tableBody = $('#character-table tbody');
             var templateRow = $('#template-row').clone().removeAttr('id').removeAttr('style');
             tableBody.empty();
 
-            $.each(data, function(index, row){
+            $.each(data, function(index, row) {
                 var newRow = templateRow.clone();
                 newRow.find('.id').text(row.id);
                 newRow.find('.name').text(row.name);
                 newRow.find('.title').text(row.title);
                 newRow.find('.alignment').text(row.alignment);
+                newRow.find('.actions').html('<button class="delete-btn" data-id="' + row.id + '">Delete</button><button class="edit-btn" data-id="' + row.id + '">Edit</button>');
                 tableBody.append(newRow);
             });
         },
-        error: function(jqXHR, textStatus, errorThrown){
+        error: function(jqXHR, textStatus, errorThrown) {
             console.error('Error loading data: ' + textStatus, errorThrown);
         }
     });
 }
 
-
-
 // Open modal
-document.getElementById('openModalBtn').onclick = function(){
-    var modal = document.getElementById('modal');
-    modal.style.display = 'block';
-}
-
-document.getElementById('refresh').onclick = function(){
-
- window.location.reload();
-}
-
-
+$('#openModalBtn').click(function() {
+    $('#modal').show();
+});
 
 // Close modal
-document.getElementsByClassName('close')[0].onclick = function(){
-    var modal = document.getElementById('modal');
-    modal.style.display = 'none';
-}
+$('.close').click(function() {
+    $('#modal').hide();
+});
 
-
-//refresh page
-window.onclick = function(event){
-    var modal = document.getElementById('modal');
-    if (event.target == modal) {
-        modal.style.display = 'none';
+// Close modal when clicking outside
+$(window).click(function(event) {
+    if ($(event.target).is('#modal')) {
+        $('#modal').hide();
     }
-}
+});
 
-
-//Add Character
-$('#addCharacterForm').submit(function(event){
+// Add character
+$('#addCharacterForm').submit(function(event) {
     event.preventDefault();
 
     var formData = $(this).serialize();
@@ -73,67 +57,46 @@ $('#addCharacterForm').submit(function(event){
         method: 'POST',
         data: formData,
         dataType: 'json',
-        success: function(response){
+        success: function(response) {
             console.log('Character added successfully: ', response);
-
-            // Close the modal after successful form submission
             $('#modal').hide();
-
-            // Reload the table to show the new character
             loadTable();
-            window.location.reload();
-
-
         },
-        error: function(jqXHR, textStatus, errorThrown){
-            console.error('Error adding characters: ', textStatus, errorThrown );
-            alert('Failed to add character, please try again.');  
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error adding character: ', textStatus, errorThrown);
+            alert('Failed to add character, please try again.');
         }
     });
 });
 
-
-//delete character
-$('#character-table').on('click','.delete-btn',function(){
-
-    if (!confirm('Are you sure you want to delete this character?')){
+// Delete character
+$('#character-table').on('click', '.delete-btn', function() {
+    if (!confirm('Are you sure you want to delete this character?')) {
         return;
     }
 
-    var row = $(this).closest('tr');
-    var id = row.find('.id').text();
+    var id = $(this).data('id');
 
     $.ajax({
-        url:'deleteCharacters.php',
-        method:'POST',
-        data:{id:id},
-        dataType:'json',
-        success:function(response){
-            console.log('Character deleted successfully:',response);
-            row.remove();
-            
+        url: 'deleteCharacters.php',
+        method: 'POST',
+        data: { id: id },
+        dataType: 'json',
+        success: function(response) {
+            console.log('Character deleted successfully:', response);
+            loadTable(); // Reload the table to remove the deleted character
         },
-
-        error:function(jqXHR,textStatus,errorThrown){
+        error: function(jqXHR, textStatus, errorThrown) {
             console.error('Error deleting character:', textStatus, errorThrown);
-            alert('Failed to delete character. Please Try again.');
-
+            alert('Failed to delete character. Please try again.');
         }
-    })
-})
-
-
-//close edit
-
-$('#close-edit').click(function() {
-    $('#edit-modal').hide();
+    });
 });
 
-
-//fetch edit
+// Open edit modal
 $(document).on('click', '.edit-btn', function() {
-    var row = $(this).closest('tr');
-    var id = row.find('.id').text();
+    var id = $(this).data('id');
+    
     $.ajax({
         url: 'fetchCharacter.php',
         type: 'GET',
@@ -152,8 +115,7 @@ $(document).on('click', '.edit-btn', function() {
     });
 });
 
-
-//edit function
+// Edit character
 $('#edit-form').submit(function(e) {
     e.preventDefault();
 
@@ -163,20 +125,13 @@ $('#edit-form').submit(function(e) {
     var alignment = $('#edit-alignment').val();
 
     $.ajax({
-        url: 'editCharacter.php',  // This is the server-side PHP file
+        url: 'editCharacter.php',
         type: 'POST',
-        data: {
-            id: id,
-            name: name,
-            title: title,
-            alignment: alignment
-        },
+        data: { id: id, name: name, title: title, alignment: alignment },
         success: function(response) {
             alert('Character updated successfully!');
             $('#edit-modal').hide();
             loadTable(); 
-            
-            window.location.reload(); // Reload the table to show updated details
         },
         error: function() {
             alert('Error updating character.');
@@ -184,8 +139,7 @@ $('#edit-form').submit(function(e) {
     });
 });
 
-
-//Filter Function
+// Filter function
 $("#filtername").on('input', function() {
     var nameInput = $(this).val().trim(); // Get the trimmed input value
 
@@ -195,7 +149,7 @@ $("#filtername").on('input', function() {
     // If nameInput is empty, reload the page
     if (nameInput === "") {
         console.log("Table empty, reloading page");
-        window.location.reload(); // Reload the page if nameInput is empty
+        loadTable(); // Reload the table instead of reloading the page
         return;
     }
 
@@ -206,13 +160,10 @@ $("#filtername").on('input', function() {
         data: { name: nameInput }, // Send data as key-value pairs
         dataType: 'json',
         success: function(data) {
-
             var tableBody = $('#character-table tbody');
-            var actions =$('.actions');
             tableBody.empty();
             if (Array.isArray(data)) {
                 $.each(data, function(index, row) {
-                    // Create a new row for each item
                     var newRow = $('<tr></tr>');
                     newRow.append('<td>' + row.id + '</td>');
                     newRow.append('<td>' + row.name + '</td>');
@@ -231,4 +182,3 @@ $("#filtername").on('input', function() {
         }
     });
 });
-

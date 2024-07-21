@@ -4,8 +4,9 @@ include 'connection.php';
 $name = isset($_POST['name']) ? $_POST['name'] : '';
 
 // Use prepared statements to avoid SQL injection risks
-$stmt = $conn->prepare("SELECT * FROM characters WHERE name LIKE ?");
+$stmt = $conn->prepare("SELECT * FROM characters WHERE name LIKE ? ");
 $searchTerm = "%$name%";
+
 $stmt->bind_param("s", $searchTerm);
 
 // Execute the statement
@@ -22,9 +23,11 @@ if ($result->num_rows > 0) {
 }
 
 // Close the statement and connection
-$stmt->close();
-$conn->close();
+
 
 // Return the result as a JSON response
 echo json_encode($characters);
+
+$stmt->close();
+$conn->close();
 ?>
