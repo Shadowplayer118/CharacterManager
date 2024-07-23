@@ -15,14 +15,16 @@ $stmt->bind_param("i", $id);
 
 $stmt->execute();
 
-$stmt->bind_result($id, $name, $title, $alignment);
+$stmt->bind_result($id, $name, $title, $alignment, $timeline, $race);
 
 if ($stmt->fetch()) {
     echo json_encode([
         'id' => $id,
         'name' => $name,
         'title' => $title,
-        'alignment' => $alignment
+        'alignment' => $alignment,
+        'timeline' => $timeline,
+        'race' => $race
     ]);
 } else {
     echo json_encode(['error' => 'Character not found']);

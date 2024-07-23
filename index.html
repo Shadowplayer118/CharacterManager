@@ -50,6 +50,12 @@
                     <option value="Truth">Truth</option>
                 </select>
 
+                <label for="timeline">Timeline: </label>
+                <input type="text" id="timeline" name="timeline"><br>
+
+                <label for="race">Race: </label>
+                <input type="text" id="race" name="race"><br>
+
                 <button type="submit">Add Character</button>
             </form>
         </div>
@@ -62,6 +68,8 @@
             <th>Name</th>
             <th>Title</th>
             <th>Alignment</th>
+            <th>Timeline</th>
+            <th>Race</th>
         </thead>
         <tbody>
             <tr id="template-row" style="display:none;">
@@ -69,6 +77,8 @@
                 <td class="name"></td>
                 <td class="title"></td>
                 <td class="alignment"></td>
+                <td class="timeline"></td>
+                <td class="race"></td>
 
                 <td class = "actions">      
                     <button class="delete-btn">Delete</button>
@@ -85,13 +95,13 @@
         <span class="close-edit" id = "close-edit">&times;</span>
         <h3>Edit Form</h3>
             <form action="" id="edit-form">
-                <input type="text" id="edit-id" name="id" style="display:none"><br/>
+                <input type="text" id="edit-id" name="id" style="display:none"><br>
 
                 <label for="Name">Name:</label>
-                <input type="text" id="edit-name" name="name" required><br/>
+                <input type="text" id="edit-name" name="name" required><br>
 
                 <label for="title">Title:</label>
-                <input type="text" id="edit-title" name="title">
+                <input type="text" id="edit-title" name="title"><br>
 
                 <label for="alignment">Alignment</label>
                     <select name="alignment" id="edit-alignment">
@@ -102,6 +112,13 @@
                         <option value="Horror">Horror</option>
                         <option value="Truth">Truth</option>
                     </select><br/>
+
+                    <label for="timeline">Timeline:</label>
+                <input type="text" id="edit-timeline" name="timeline"><br>
+                
+                <label for="race">Race:</label>
+                <input type="text" id="edit-race" name="race"><br>
+
                 <button type = "submit">Save Changes</button>
             </form>
         </div>

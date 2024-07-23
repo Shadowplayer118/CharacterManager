@@ -27,6 +27,10 @@ function loadTable() {
                 newRow.find('.name').text(row.name);
                 newRow.find('.title').text(row.title);
                 newRow.find('.alignment').text(row.alignment);
+                newRow.find('.timeline').text(row.timeline);
+
+                newRow.find('.race').text(row.race);
+
                 newRow.find('.actions').html('<button class="delete-btn" data-id="' + row.id + '">Delete</button><button class="edit-btn" data-id="' + row.id + '">Edit</button>');
                 tableBody.append(newRow);
             });
@@ -117,6 +121,8 @@ $(document).on('click', '.edit-btn', function() {
             $('#edit-name').val(character.name);
             $('#edit-title').val(character.title);
             $('#edit-alignment').val(character.alignment);
+            $('#edit-timeline').val(character.timeline);
+            $('#edit-race').val(character.race);
             $('#edit-modal').show();
         },
         error: function() {
@@ -133,11 +139,14 @@ $('#edit-form').submit(function(e) {
     var name = $('#edit-name').val();
     var title = $('#edit-title').val();
     var alignment = $('#edit-alignment').val();
+    var timeline = $('#edit-timeline').val();
+    var race = $('#edit-race').val();
+
 
     $.ajax({
         url: 'editCharacter.php',
         type: 'POST',
-        data: { id: id, name: name, title: title, alignment: alignment },
+        data: { id: id, name: name, title: title, alignment: alignment, timeline: timeline, race: race },
         success: function(response) {
             alert('Character updated successfully!');
             $('#edit-modal').hide();
@@ -253,6 +262,8 @@ function performFilter(nameInput) {
                     newRow.append('<td>' + row.name + '</td>');
                     newRow.append('<td>' + row.title + '</td>');
                     newRow.append('<td>' + row.alignment + '</td>');
+                    newRow.append('<td>' + row.timeline + '</td>');
+                    newRow.append('<td>' + row.race + '</td>');
                     newRow.append('<td><button class="delete-btn" data-id="' + row.id + '">Delete</button><button class="edit-btn" data-id="' + row.id + '">Edit</button></td>');
                     tableBody.append(newRow);
                 });
