@@ -1,5 +1,13 @@
 $(document).ready(function() {
+
     loadTable();
+    
+    var savedFilter = localStorage.getItem('nameInput');
+    if (savedFilter) {
+        $('#filtername').val(savedFilter);
+        performFilter(savedFilter);}
+   
+    // document.getElementById('filtername').value = 'Shadow';
 });
 
 // Load table with data from the server
@@ -142,33 +150,104 @@ $('#edit-form').submit(function(e) {
     });
 });
 
+//Filter_Value_Getter
+
+
 // Filter function
-$("#filtername").on('input', function() {
-    var nameInput = $(this).val().trim(); // Get the trimmed input value
+// $("#filter-btn").on('click', function() {
+//     var nameInput = $('#filtername').val().trim(); // Get the trimmed input value
+//     localStorage.setItem('nameInput',nameInput);
 
-    // Console logs for debugging
-    console.log("Name input:", nameInput);
+//     // Console logs for debugging
+//     console.log("Name input:", nameInput);
 
-    // If nameInput is empty, reload the page
-    if (nameInput === "") {
-        console.log("Table empty, reloading page");
-        // loadTable();
-         // Reload the table instead of reloading the page
-         location.reload();
-        return;
+//     // If nameInput is empty, reload the page
+//     if (nameInput === "") {
+//         console.log("Table empty, reloading page");
+//         // loadTable();
+//          // Reload the table instead of reloading the page
+//          location.reload();
+//         return;
+//     }
+
+//     // Perform AJAX request with the filter data
+//     $.ajax({
+//         url: 'filterCharacter.php',
+//         method: 'POST',
+//         data: { name: nameInput }, // Send data as key-value pairs
+//         dataType: 'json',
+//         success: function(data) {
+          
+//             var tableBody = $('#character-table tbody');
+//             tableBody.empty();
+//             if (Array.isArray(data)) {
+//                 $.each(data, function(index, row) {
+//                     var newRow = $('<tr></tr>');
+//                     newRow.append('<td>' + row.id + '</td>');
+//                     newRow.append('<td>' + row.name + '</td>');
+//                     newRow.append('<td>' + row.title + '</td>');
+//                     newRow.append('<td>' + row.alignment + '</td>');
+//                     newRow.append('<td><button class="delete-btn" data-id="' + row.id + '">Delete</button><button class="edit-btn" data-id="' + row.id + '">Edit</button></td>');
+//                     tableBody.append(newRow);
+                    
+//                 });
+//             } else {
+//                 console.error('Unexpected data format:', data);
+//             }
+//         },
+        
+//         error: function(jqXHR, textStatus, errorThrown) {
+//             console.error('Error loading data: ' + textStatus, errorThrown);
+//         }
+//     });
+// });
+
+
+
+$(document).ready(function() {
+    // Load the filter value from localStorage when the page loads
+    var savedFilter = localStorage.getItem('nameInput');
+    if (savedFilter) {
+        $('#filtername').val(savedFilter);
+        performFilter(savedFilter); // Perform filter if saved value exists
     }
 
-    // Perform AJAX request with the filter data
+    $("#filter-btn").on('click', function() {
+        var nameInput = $('#filtername').val().trim(); // Get the trimmed input value
+        localStorage.setItem('nameInput', nameInput);
+
+        // Console logs for debugging
+        console.log("Name input:", nameInput);
+
+        // If nameInput is empty, reload the page
+        if (nameInput === "") {
+            console.log("Table empty, reloading page");
+            setTimeout(function() {
+                location.reload();
+            }, 5000); // Reload after 5 seconds
+            return;
+        }
+
+        // Perform AJAX request with the filter data
+        performFilter(nameInput);
+    });
+});
+
+function performFilter(nameInput) {
     $.ajax({
         url: 'filterCharacter.php',
         method: 'POST',
         data: { name: nameInput }, // Send data as key-value pairs
         dataType: 'json',
         success: function(data) {
+            console.log("AJAX success, data received:", data); // Debug statement
             var tableBody = $('#character-table tbody');
             tableBody.empty();
+
+            // Check if data is an array and has content
             if (Array.isArray(data)) {
                 $.each(data, function(index, row) {
+                    console.log("Processing row:", row); // Debug each row
                     var newRow = $('<tr></tr>');
                     newRow.append('<td>' + row.id + '</td>');
                     newRow.append('<td>' + row.name + '</td>');
@@ -178,12 +257,13 @@ $("#filtername").on('input', function() {
                     tableBody.append(newRow);
                 });
             } else {
-                console.error('Unexpected data format:', data);
+                console.error('Unexpected data format or empty data:', data);
+                // tableBody.append('<tr><td colspan="5">No results found</td></tr>');
             }
         },
-        
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('Error loading data: ' + textStatus, errorThrown);
         }
     });
-});
+}
+
