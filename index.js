@@ -60,7 +60,8 @@ $('#addCharacterForm').submit(function(event) {
         success: function(response) {
             console.log('Character added successfully: ', response);
             $('#modal').hide();
-            loadTable();
+            location.reload();
+            // loadTable();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('Error adding character: ', textStatus, errorThrown);
@@ -84,7 +85,8 @@ $('#character-table').on('click', '.delete-btn', function() {
         dataType: 'json',
         success: function(response) {
             console.log('Character deleted successfully:', response);
-            loadTable(); // Reload the table to remove the deleted character
+            location.reload();
+            // loadTable(); // Reload the table to remove the deleted character
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('Error deleting character:', textStatus, errorThrown);
@@ -131,7 +133,8 @@ $('#edit-form').submit(function(e) {
         success: function(response) {
             alert('Character updated successfully!');
             $('#edit-modal').hide();
-            loadTable(); 
+            // loadTable(); 
+            location.reload();
         },
         error: function() {
             alert('Error updating character.');
@@ -149,7 +152,9 @@ $("#filtername").on('input', function() {
     // If nameInput is empty, reload the page
     if (nameInput === "") {
         console.log("Table empty, reloading page");
-        loadTable(); // Reload the table instead of reloading the page
+        // loadTable();
+         // Reload the table instead of reloading the page
+         location.reload();
         return;
     }
 
