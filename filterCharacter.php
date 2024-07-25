@@ -4,10 +4,11 @@ include 'connection.php';
 $name = isset($_POST['name']) ? $_POST['name'] : '';
 
 // Use prepared statements to avoid SQL injection risks
-$stmt = $conn->prepare("SELECT * FROM characters WHERE name LIKE ? ");
+$stmt = $conn->prepare("SELECT * FROM characters WHERE name LIKE ? OR title LIKE ? OR alignment LIKE ? OR timeline LIKE ?");
 $searchTerm = "%$name%";
 
-$stmt->bind_param("s", $searchTerm);
+
+$stmt->bind_param("ssss", $searchTerm,  $searchTerm,  $searchTerm, $searchTerm);
 
 // Execute the statement
 $stmt->execute();

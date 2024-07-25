@@ -270,6 +270,7 @@ function performFilter(nameInput) {
                     newRow.append('<td>' + row.race + '</td>');
                     newRow.append('<td><button class="delete-btn" data-id="' + row.id + '">Delete</button><button class="edit-btn" data-id="' + row.id + '">Edit</button></td>');
                     tableBody.append(newRow);
+                    // document.getElementById('filtername').value = '';  
                 });
             } else {
                 console.error('Unexpected data format or empty data:', data);
@@ -281,4 +282,13 @@ function performFilter(nameInput) {
         }
     });
 }
+
+$('#clear').click(function(){
+    localStorage.setItem('nameInput','');
+    document.getElementById('filtername').value = "";
+    location.reload().
+    console.log('hello');
+}
+) 
+
 
