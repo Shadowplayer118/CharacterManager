@@ -72,6 +72,9 @@ $('#addCharacterForm').submit(function(event) {
         success: function(response) {
             console.log('Character added successfully: ', response);
             $('#modal').hide();
+            localStorage.setItem('nameInput','');
+            document.getElementById('filtername').value = "";
+          
             location.reload();
             // loadTable();
         },
@@ -216,6 +219,7 @@ $('#edit-form').submit(function(e) {
 $(document).ready(function() {
     // Load the filter value from localStorage when the page loads
     var savedFilter = localStorage.getItem('nameInput');
+
     if (savedFilter) {
         $('#filtername').val(savedFilter);
         performFilter(savedFilter); // Perform filter if saved value exists
