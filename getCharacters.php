@@ -1,7 +1,7 @@
 <?php
 include 'connection.php';
 
-$sqlQuery = "Select * from characters";
+$sqlQuery = "Select * from characters ORDER BY id DESC";
 $result = mysqli_query($conn,$sqlQuery);
 
 

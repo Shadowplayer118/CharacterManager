@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <title>Characters</title>
 </head>
 
@@ -63,32 +66,41 @@
     </div>
 
     <!-- Table Template-->
-    <table id="character-table">
-        <thead>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Title</th>
-            <th>Alignment</th>
-            <th>Timeline</th>
-            <th>Race</th>
-        </thead>
-        <tbody>
-            <tr id="template-row" style="display:none;">
-                <td class="id"></td>
-                <td class="name"></td>
-                <td class="title"></td>
-                <td class="alignment"></td>
-                <td class="timeline"></td>
-                <td class="race"></td>
+     <div class="table-container">
 
-                <td class = "actions">      
-                    <button class="delete-btn">Delete</button>
-                    <button class="edit-btn">Edit</button>
-                </td>
+        <table id="character-table" class="character-table">
 
-            </tr>
-        </tbody>
-    </table>
+            
+            <thead>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Alignment</th>
+                <th>Timeline</th>
+                <th>Race</th>
+                <th>Actions</th>
+            </thead>
+    
+            <tbody>
+                <tr id="template-row" style="display:none;" class="table_tr">
+                    <td class="id"></td>
+                    <td class="name"></td>
+                    <td class="title"></td>
+                    <td class="alignment"></td>
+                    <td class="timeline"></td>
+                    <td class="race"></td>
+    
+                    <td class = "actions">      
+                        <button class="delete-btn">Delete</button>
+                        <button class="edit-btn">Edit</button>
+                    </td>
+    
+                </tr>
+            </tbody>
+        </table>
+
+     </div>
+    
 
     <!-- Edit Modal -->
     <div id="edit-modal" class = "edit-modal" data-id="">
