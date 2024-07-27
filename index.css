@@ -3,7 +3,10 @@
 
 *{
     font-family: 'poppins';
+    font-size: small;
 }
+
+
 
 .modal{
     display: none;
@@ -26,6 +29,30 @@
     max-width: 600px; /* Adjust width as needed */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative;
+}
+
+.container{
+position: relative;
+left: 200px;
+top: 50px;
+}
+
+.container button{
+    text-decoration: none;
+    border: 0px;
+    margin: 2px;
+    background-color: #4d4848; /* Highlight row on hover */
+    color: wheat;
+    font-size: smaller;
+    height: 20px;
+    border-radius: 5px;
+}
+
+
+.container button:hover{
+ cursor: pointer;
+ background-color: #2d2a2a; /* Highlight row on hover */
+ color: wheat;
 }
 
 
@@ -76,36 +103,42 @@
 .table-container
 {
     overflow: auto;
-    max-height: 500px;
-    border-radius: 10px;
-    background-color: rgb(0, 0, 0);
-    width: 1300px;
-    color: aliceblue;
-    position: relative;
-    left: 40px;
+    max-height: 400px;
+    border-radius: 5px 5px 0px 0px;
+
+  
+    background-color: beige;
+    width: 800px;
+    /* color: black; */
+    /* position: relative;
+    left: 200px;
+    top: 50px; */
     
 }
 
 .character-table{
-    
-    text-align: center;
-    width: 1200px;
-   position: relative;
   
+    text-align: left;
+    width: 100%;
+   position: relative;
+   border-collapse: collapse;
     table-layout: fixed;
    
     
 }
 
 .character-table tbody tr:hover {
-    background-color: #312f2f; /* Highlight row on hover */
-    
-    box-shadow: 0 0 15px rgba(0, 0, 255, 0.5); /* Glowing effect */
+   
+  
+    background-color: #c9baba; /* Highlight row on hover */
+    color: rgb(58, 56, 54);
+    box-shadow: 0 0 15px rgba(165, 169, 156, 0.5); /* Glowing effect */
     transition: box-shadow 0.3s ease; /* Smooth transition for the glowing effect */
+    cursor: default;
 }
 
 
-
+/* 
 th{
 
 width: 150px;
@@ -115,11 +148,17 @@ padding: 0px;
 border-color: rgb(169, 58, 58);
 border: none;
 
+} */
+
+td{
+    padding-left: 10px;
 }
 
-thead{
+thead tr{
+    
 
-    background-color: black;
+    background-color: #4d4848; /* Highlight row on hover */
+    color: wheat;
     position: sticky;
     top: 0;
     z-index: 1;
@@ -139,8 +178,8 @@ border: none;
 } */
 
 .character-table{
-    background-color: rgb(0, 0, 0);
-    color: aliceblue;
+
+    color: black;
 }
 
 .header{
@@ -151,3 +190,23 @@ border: none;
 th{
     background-color: blue;
 } */
+
+.controllers{
+    width: 700px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    
+}
+
+.controllers > * {
+margin-right: 40px;
+}
+
+#filtername{
+    width: 300px;
+}
+
+
+
