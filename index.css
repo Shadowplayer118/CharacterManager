@@ -52,7 +52,7 @@ top: 50px;
 .container button:hover{
  cursor: pointer;
  background-color: #2d2a2a; /* Highlight row on hover */
- color: wheat;
+ color: rgb(254, 243, 222);
 }
 
 

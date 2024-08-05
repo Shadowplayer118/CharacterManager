@@ -158,7 +158,6 @@ $('#edit-form').submit(function(e) {
     var timeline = $('#edit-timeline').val();
     var race = $('#edit-race').val();
 
-
     $.ajax({
         url: 'editCharacter.php',
         type: 'POST',
@@ -175,6 +174,8 @@ $('#edit-form').submit(function(e) {
     });
 });
 
+
+//filter
 
 $(document).ready(function() {
     // Load the filter value from localStorage when the page loads
@@ -206,6 +207,8 @@ $(document).ready(function() {
     });
 });
 
+
+//filter
 function performFilter(nameInput) {
     $.ajax({
         url: 'filterCharacter.php',
@@ -250,5 +253,3 @@ $('#clear').click(function(){
     console.log('hello');
 }
 ) 
-
-
